@@ -1,0 +1,37 @@
+{% extends 'students/base.html' %}
+{% block content %}
+<h2>{{ object.title }}</h2>
+<p>{{ object.description }}</p>
+<p><strong>Category:</strong> {{ object.category }}</p>
+<p><strong>Date:</strong> {{ object.event_date }}</p>
+<p><strong>Location:</strong> {{ object.location }}</p>
+<p><strong>Participants:</strong> {{ participants.count }}{% if object.max_participants %}/{{ object.max_participants }}{% endif %}</p>
+
+{% if user.is_authenticated %}
+  {% if user in participants.values_list 'user', flat=True %}
+    <a class="btn btn-warning" href="{% url 'leave_event' object.pk %}">Leave Event</a>
+  {% else %}
+    <a class="btn btn-success" href="{% url 'join_event' object.pk %}">Join Event</a>
+  {% endif %}
+  {% if user == object.creator %}
+    <a class="btn btn-secondary" href="{% url 'event_edit' object.pk %}">Edit</a>
+    <a class="btn btn-danger" href="{% url 'event_delete' object.pk %}">Delete</a>
+  {% endif %}
+{% endif %}
+
+<hr>
+<h4>Comments</h4>
+<form method="post" action="{% url 'add_comment' object.pk %}">
+  {% csrf_token %}
+  {{ comment_form.as_p }}
+  <button class="btn btn-primary">Add Comment</button>
+</form>
+
+<ul class="list-group mt-3">
+  {% for comment in object.comments.all %}
+    <li class="list-group-item"><strong>{{ comment.author.username }}:</strong> {{ comment.body }}</li>
+  {% empty %}
+    <li class="list-group-item">No comments yet</li>
+  {% endfor %}
+</ul>
+{% endblock %}

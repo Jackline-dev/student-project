@@ -1,0 +1,30 @@
+{% extends 'students/base.html' %}
+{% block content %}
+<h2>Upcoming Events</h2>
+<ul class="list-group mb-4">
+  {% for event in upcoming_events %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+      <div>
+        <a href="{% url 'event_detail' event.pk %}"><strong>{{ event.title }}</strong></a>
+        <div class="small text-muted">{{ event.category }} — {{ event.event_date }}</div>
+      </div>
+      <div>
+        {{ event.participant_count }}{% if event.max_participants %}/{{ event.max_participants }}{% endif %}
+      </div>
+    </li>
+  {% empty %}
+    <li class="list-group-item">No upcoming events</li>
+  {% endfor %}
+</ul>
+
+<h3>Events You Joined</h3>
+<ul class="list-group">
+  {% for event in joined_events %}
+    <li class="list-group-item">
+      <a href="{% url 'event_detail' event.pk %}">{{ event.title }}</a> — {{ event.event_date }}
+    </li>
+  {% empty %}
+    <li class="list-group-item">You haven't joined any events</li>
+  {% endfor %}
+</ul>
+{% endblock %}

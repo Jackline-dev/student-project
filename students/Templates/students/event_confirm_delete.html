@@ -1,0 +1,10 @@
+{% extends 'students/base.html' %}
+{% block content %}
+<h2>Confirm Delete</h2>
+<p>Are you sure you want to delete "{{ object.title }}"?</p>
+<form method="post">
+  {% csrf_token %}
+  <button class="btn btn-danger">Yes, delete</button>
+  <a class="btn btn-secondary" href="{% url 'event_detail' object.pk %}">Cancel</a>
+</form>
+{% endblock %}
