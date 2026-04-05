@@ -1,9 +1,48 @@
-{% extends 'students/base.html' %}
+{% extends 'students/base.html' %} {% block title %}Login | Campus Events{% endblock %}
+
 {% block content %}
-<h2>Login</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button class="btn btn-primary">Login</button>
-</form>
+<div class="row justify-content-center align-items-center" style="min-height: 70vh;">
+    <div class="col-md-5 col-lg-4">
+        <div class="card shadow-lg border-0">
+            <div class="card-body p-4">
+                <div class="text-center mb-4">
+                    <div class="bg-primary text-white d-inline-block p-3 rounded-circle mb-3">
+                        <i class="bi bi-person-lock fs-2"></i>
+                    </div>
+                    <h3 class="fw-bold">Welcome Back</h3>
+                    <p class="text-muted">Login to manage your events</p>
+                </div>
+
+                <form method="post">
+                    {% csrf_token %}
+                    
+                    {% for field in form %}
+                        <div class="mb-3">
+                            <label class="form-label small fw-bold text-uppercase text-muted">{{ field.label }}</label>
+                            {{ field }}
+                            {% for error in field.errors %}
+                                <div class="text-danger small">{{ error }}</div>
+                            {% endfor %}
+                        </div>
+                    {% endfor %}
+
+                    <div class="d-grid mt-4">
+                        <button type="submit" class="btn btn-primary btn-lg shadow-sm">Sign In</button>
+                    </div>
+                </form>
+
+                <div class="text-center mt-4">
+                    <p class="small text-muted mb-0">Don't have an account?</p>
+                    <a href="{% url 'register' %}" class="text-primary fw-bold text-decoration-none">Create an account</a>
+                </div>
+            </div>
+        </div>
+        
+        <div class="text-center mt-3">
+            <a href="{% url 'index' %}" class="text-muted small text-decoration-none">
+                <i class="bi bi-arrow-left"></i> Back to Home
+            </a>
+        </div>
+    </div>
+</div>
 {% endblock %}

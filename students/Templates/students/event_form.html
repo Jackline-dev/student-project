@@ -1,10 +1,118 @@
-{% extends 'students/base.html' %}
+{% extends 'base.html' %}
+
+{% block title %}{% if object %}Edit{% else %}Create{% endif %} Event | Campus Events{% endblock %}
+
 {% block content %}
-<h2>{% if object %}Edit{% else %}Create{% endif %} Event</h2>
-<form method="post">
-  {% csrf_token %}
-  {{ form.as_p }}
-  <button class="btn btn-success">Save</button>
-  <a class="btn btn-secondary" href="{% url 'event_list' %}">Cancel</a>
-</form>
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <a href="{% url 'event_list' %}" class="btn btn-link text-decoration-none p-0 mb-3 text-muted">
+            <i class="bi bi-arrow-left"></i> Back to Events
+        </a>
+
+        <div class="card shadow border-0 overflow-hidden">
+            <div class="card-header bg-success text-white py-3">
+                <h4 class="mb-0 fw-bold">
+                    <i class="bi {% if object %}bi-pencil-square{% else %}bi-plus-circle{% endif %} me-2"></i>
+                    {% if object %}Edit Event Details{% else %}Create a New Event{% endif %}
+                </h4>
+            </div>
+            
+            <div class="card-body p-4 p-md-5">
+                <form method="post" enctype="multipart/form-data" novalidate>
+                    {% csrf_token %}
+                    
+                    <div class="row">
+                        <div class="col-md-7 border-end-md">
+                            <h5 class="text-uppercase small fw-bold text-muted mb-4">General Information</h5>
+                            
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Event Title</label>
+                                {{ form.title }}
+                                <div class="form-text">Choose a catchy name for your event.</div>
+                                {% if form.title.errors %}<div class="text-danger small">{{ form.title.errors }}</div>{% endif %}
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Category</label>
+                                {{ form.category }}
+                                {% if form.category.errors %}<div class="text-danger small">{{ form.category.errors }}</div>{% endif %}
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold">Description</label>
+                                {{ form.description }}
+                                {% if form.description.errors %}<div class="text-danger small">{{ form.description.errors }}</div>{% endif %}
+                            </div>
+                        </div>
+
+                        <div class="col-md-5 ps-md-4">
+                            <h5 class="text-uppercase small fw-bold text-muted mb-4">Logistics & Limits</h5>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold"><i class="bi bi-calendar-event me-1"></i> Date & Time</label>
+                                {{ form.event_date }}
+                                {% if form.event_date.errors %}<div class="text-danger small">{{ form.event_date.errors }}</div>{% endif %}
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold"><i class="bi bi-geo-alt me-1"></i> Location</label>
+                                {{ form.location }}
+                                {% if form.location.errors %}<div class="text-danger small">{{ form.location.errors }}</div>{% endif %}
+                            </div>
+
+                            <div class="mb-4">
+                                <label class="form-label fw-semibold"><i class="bi bi-people me-1"></i> Max Participants</label>
+                                {{ form.max_participants }}
+                                <div class="form-text small">Leave blank for unlimited.</div>
+                                {% if form.max_participants.errors %}<div class="text-danger small">{{ form.max_participants.errors }}</div>{% endif %}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="border-top pt-4 mt-2 d-flex justify-content-end gap-2">
+                        <a class="btn btn-light border px-4" href="{% url 'event_list' %}">Cancel</a>
+                        <button type="submit" class="btn btn-success px-5 fw-bold shadow-sm">
+                            {% if object %}Update Event{% else %}Publish Event{% endif %}
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        {% if not object %}
+        <div class="alert alert-info mt-4 border-0 shadow-sm d-flex align-items-center">
+            <i class="bi bi-info-circle-fill fs-4 me-3"></i>
+            <div>
+                <strong>Note:</strong> Your event will be sent to the campus administrators for verification before it appears on the public list.
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+
+<style>
+    /* Styling for Django's default form fields to match Bootstrap */
+    input, select, textarea {
+        display: block;
+        width: 100%;
+        padding: 0.375rem 0.75rem;
+        font-size: 1rem;
+        font-weight: 400;
+        line-height: 1.5;
+        color: #212529;
+        background-color: #fff;
+        background-clip: padding-box;
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+    }
+    input:focus, select:focus, textarea:focus {
+        border-color: #86b7fe;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.25);
+    }
+    @media (min-width: 768px) {
+        .border-end-md { border-right: 1px solid #dee2e6 !important; }
+    }
+</style>
 {% endblock %}

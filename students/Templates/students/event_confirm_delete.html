@@ -1,10 +1,35 @@
 {% extends 'students/base.html' %}
+
+{% block title %}Delete Event | {{ object.title }}{% endblock %}
+
 {% block content %}
-<h2>Confirm Delete</h2>
-<p>Are you sure you want to delete "{{ object.title }}"?</p>
-<form method="post">
-  {% csrf_token %}
-  <button class="btn btn-danger">Yes, delete</button>
-  <a class="btn btn-secondary" href="{% url 'event_detail' object.pk %}">Cancel</a>
-</form>
+<div class="row justify-content-center py-5">
+    <div class="col-md-6 col-lg-5">
+        <div class="card shadow border-0">
+            <div class="card-body p-5 text-center">
+                <div class="text-danger mb-4">
+                    <i class="bi bi-exclamation-triangle-fill display-1"></i>
+                </div>
+                
+                <h2 class="fw-bold mb-3">Delete Event?</h2>
+                <p class="text-muted mb-4">
+                    Are you sure you want to delete <strong>"{{ object.title }}"</strong>? 
+                    This action cannot be undone and all participant data for this event will be lost.
+                </p>
+
+                <form method="post">
+                    {% csrf_token %}
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-danger btn-lg shadow-sm">
+                            Confirm Permanent Delete
+                        </button>
+                        <a href="{% url 'event_detail' object.pk %}" class="btn btn-light btn-lg border">
+                            Cancel and Go Back
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
 {% endblock %}

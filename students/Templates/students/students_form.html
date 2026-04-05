@@ -1,11 +1,117 @@
+{% extends 'base.html' %}
 
-{% extends 'students/base.html' %}
+{% block title %}Post a New Event | Campus Events{% endblock %}
 
 {% block content %}
-  <h2>Add Event</h2>
-  <form method="post">
-    {% csrf_token %}
-    {{ form.as_p }}
-    <button type="submit" class="btn btn-primary">Save</button>
-  </form>
+<div class="row justify-content-center">
+    <div class="col-lg-9 col-xl-8">
+        <nav aria-label="breadcrumb" class="mb-3">
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item"><a href="{% url 'dashboard' %}">Dashboard</a></li>
+                <li class="breadcrumb-item active">Add Event</li>
+            </ol>
+        </nav>
+        
+        <h2 class="fw-bold text-dark mb-4">Create a New Campus Event</h2>
+
+        <div class="card shadow-lg border-0 rounded-4 overflow-hidden">
+            <div class="card-header bg-primary text-white py-3">
+                <h5 class="mb-0"><i class="bi bi-calendar-plus me-2"></i>Event Information Form</h5>
+            </div>
+            <div class="card-body p-4 p-md-5">
+                <form method="post" novalidate>
+                    {% csrf_token %}
+
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold small">Event Title</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-type"></i></span>
+                                {{ form.title }}
+                            </div>
+                            {% if form.title.errors %}<div class="text-danger small">{{ form.title.errors }}</div>{% endif %}
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold small">Event Category</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-tag"></i></span>
+                                {{ form.category }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="mb-4">
+                        <label class="form-label fw-bold small">Event Description</label>
+                        {{ form.description }}
+                        <div class="form-text">Provide enough detail so students know what to expect.</div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold small">Date and Time</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-clock"></i></span>
+                                {{ form.event_date }}
+                            </div>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold small">Location / Room Number</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-geo-alt"></i></span>
+                                {{ form.location }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row mb-4">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label fw-bold small">Max Participants (Optional)</label>
+                            <div class="input-group">
+                                <span class="input-group-text"><i class="bi bi-people"></i></span>
+                                {{ form.max_participants }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr class="my-4">
+
+                    <div class="d-flex flex-column flex-md-row justify-content-between align-items-center">
+                        <div class="mb-3 mb-md-0">
+                            <span class="badge bg-info text-dark">
+                                <i class="bi bi-info-circle me-1"></i> Admin verification required
+                            </span>
+                            <p class="text-muted small mb-0 mt-1">Your event will be reviewed before going live.</p>
+                        </div>
+                        <div class="d-flex gap-2">
+                            <a href="{% url 'dashboard' %}" class="btn btn-light px-4 border">Cancel</a>
+                            <button type="submit" class="btn btn-primary px-5 fw-bold shadow-sm">Save & Submit</button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    input[type="text"], 
+    input[type="number"], 
+    input[type="datetime-local"], 
+    select, 
+    textarea {
+        display: block;
+        width: 100%;
+        padding: 0.5rem 0.75rem;
+        font-size: 1rem;
+        border: 1px solid #dee2e6;
+        border-radius: 0.375rem;
+        background-color: #fff;
+    }
+    textarea { height: 120px; }
+    input:focus, select:focus, textarea:focus {
+        border-color: #0d6efd;
+        outline: 0;
+        box-shadow: 0 0 0 0.25rem rgba(13, 110, 253, 0.1);
+    }
+</style>
 {% endblock %}

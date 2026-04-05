@@ -1,0 +1,59 @@
+{% extends 'students/base.html' %}
+{% load static %}
+
+{% block title %}Welcome | Campus Events{% endblock %}
+
+{% block content %}
+<div class="row align-items-center py-5">
+    <div class="col-lg-6">
+        <h1 class="display-4 fw-bold mb-3">Connecting Campus Life, One Event at a Time.</h1>
+        <p class="lead text-secondary mb-4">
+            Discover workshops, social gatherings, and lectures happening across campus. Join your fellow students and make the most of your university experience.
+        </p>
+        <div class="d-grid gap-2 d-md-flex justify-content-md-start">
+            {% if not user.is_authenticated %}
+                <a href="{% url 'register' %}" class="btn btn-primary btn-lg px-4 me-md-2 shadow-sm">Get Started</a>
+                <a href="{% url 'event_list' %}" class="btn btn-outline-secondary btn-lg px-4">Explore Events</a>
+            {% else %}
+                <a href="{% url 'dashboard' %}" class="btn btn-primary btn-lg px-4 me-md-2 shadow-sm">Go to Dashboard</a>
+                <a href="{% url 'add_event' %}" class="btn btn-success btn-lg px-4">Host an Event</a>
+            {% endif %}
+        </div>
+    </div>
+    <div class="col-lg-6 d-none d-lg-block">
+        <div class="p-5 bg-light rounded-5 text-center border border-dashed">
+            <i class="bi bi-calendar-event display-1 text-primary"></i>
+            <div class="mt-3">
+                <span class="badge bg-info text-dark">Verified Events Only</span>
+                <span class="badge bg-info text-dark">Real-time RSVP</span>
+            </div>
+        </div>
+    </div>
+</div>
+
+<hr class="my-5">
+
+<div class="row g-4 py-5 row-cols-1 row-cols-lg-3">
+    <div class="feature col text-center">
+        <div class="feature-icon d-inline-flex align-items-center justify-content-center bg-primary bg-gradient text-white fs-2 mb-3 rounded-circle" style="width: 64px; height: 64px;">
+            <i class="bi bi-search"></i>
+        </div>
+        <h3 class="fs-4 fw-bold">Discover</h3>
+        <p>Easily find events by category, date, or location. Filter through verified campus activities.</p>
+    </div>
+    <div class="feature col text-center">
+        <div class="feature-icon d-inline-flex align-items-center justify-content-center bg-success bg-gradient text-white fs-2 mb-3 rounded-circle" style="width: 64px; height: 64px;">
+            <i class="bi bi-people"></i>
+        </div>
+        <h3 class="fs-4 fw-bold">Participate</h3>
+        <p>Join events with a single click. Manage your registrations and track your attendance progress.</p>
+    </div>
+    <div class="feature col text-center">
+        <div class="feature-icon d-inline-flex align-items-center justify-content-center bg-warning bg-gradient text-white fs-2 mb-3 rounded-circle" style="width: 64px; height: 64px;">
+            <i class="bi bi-megaphone"></i>
+        </div>
+        <h3 class="fs-4 fw-bold">Organize</h3>
+        <p>Have an idea? Create your own event and invite the campus community to join you.</p>
+    </div>
+</div>
+{% endblock %}
