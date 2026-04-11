@@ -15,11 +15,24 @@
 
                 <form method="post" novalidate>
                     {% csrf_token %}
-                    
+
                     {% for field in form %}
                         <div class="mb-3">
                             <label class="form-label small fw-bold text-muted text-uppercase">{{ field.label }}</label>
-                            {{ field }}
+
+                            {% if field.field.widget.input_type == 'password' %}
+                                <!-- Password field with eye toggle -->
+                                <div class="input-group">
+                                    {{ field }}
+                                    <button class="btn btn-outline-secondary toggle-password" type="button"
+                                            data-target="{{ field.auto_id }}" tabindex="-1">
+                                        <i class="bi bi-eye"></i>
+                                    </button>
+                                </div>
+                            {% else %}
+                                {{ field }}
+                            {% endif %}
+
                             {% if field.help_text %}
                                 <div class="form-text small">{{ field.help_text }}</div>
                             {% endif %}
@@ -41,4 +54,22 @@
         </div>
     </div>
 </div>
+
+<!-- Eye Toggle Script -->
+<script>
+document.querySelectorAll('.toggle-password').forEach(function(btn) {
+    btn.addEventListener('click', function () {
+        const targetId = this.getAttribute('data-target');
+        const input = document.getElementById(targetId);
+        const icon = this.querySelector('i');
+        if (input.type === 'password') {
+            input.type = 'text';
+            icon.classList.replace('bi-eye', 'bi-eye-slash');
+        } else {
+            input.type = 'password';
+            icon.classList.replace('bi-eye-slash', 'bi-eye');
+        }
+    });
+});
+</script>
 {% endblock %}

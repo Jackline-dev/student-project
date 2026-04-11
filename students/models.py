@@ -1,6 +1,8 @@
 from django.db import models
 from django.contrib.auth.models import User
 from django.utils import timezone
+from datetime import timedelta
+import random
 
 CATEGORY_CHOICES = [
     ('Lecture', 'Lecture'),
@@ -40,16 +42,14 @@ class Event(models.Model):
     def participant_count(self):
         return self.participants.count()
 
-    # FIX: Added this property to solve the 'divide' filter error
     @property
     def attendance_progress(self):
         """Calculates the percentage of attendance for the progress bar."""
         if self.max_participants and self.max_participants > 0:
             count = self.participant_count()
-            # Calculate percentage: (current / max) * 100
             progress = (count / self.max_participants) * 100
-            return min(progress, 100)  # Cap at 100%
-        return 0 # Default to 0 if no limit is set or limit is 0
+            return min(progress, 100)
+        return 0
 
     @property
     def is_full(self):
@@ -83,3 +83,24 @@ class Comment(models.Model):
 
     def __str__(self):
         return f"Comment by {self.author.username} on {self.event.title}"
+
+
+# --- OTP PASSWORD RESET ---
+
+class PasswordResetOTP(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE, related_name='otps')
+    code = models.CharField(max_length=6)
+    created_at = models.DateTimeField(auto_now_add=True)
+    is_used = models.BooleanField(default=False)
+
+    def is_valid(self):
+        """OTP expires after 10 minutes."""
+        expiry = self.created_at + timedelta(minutes=10)
+        return not self.is_used and timezone.now() < expiry
+
+    @staticmethod
+    def generate_code():
+        return str(random.randint(100000, 999999))
+
+    def __str__(self):
+        return f"OTP for {self.user.username} - {self.code}"

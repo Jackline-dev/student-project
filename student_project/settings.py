@@ -1,7 +1,6 @@
 import os
 from pathlib import Path
-# Add this at the top for the database logic later
-import dj_database_url 
+import dj_database_url
 
 # 1. BASE DIRECTORY
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -9,7 +8,6 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 # 2. SECURITY SETTINGS
 SECRET_KEY = 'django-insecure-3no(p7+o4m1irj%)*a&up#hm29v@j2jio+um8ewfwgyj-uw-fx'
 DEBUG = True
-# UPDATE: Added '*' so it works on Render automatically
 ALLOWED_HOSTS = ['127.0.0.1', 'localhost', '.onrender.com', '*']
 
 # 3. APPLICATION DEFINITION
@@ -20,13 +18,12 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'students', 
+    'students',
 ]
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # PHASE 3 UPDATE: Added WhiteNoise right here
-    'whitenoise.middleware.WhiteNoiseMiddleware', 
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -40,7 +37,7 @@ ROOT_URLCONF = 'student_project.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'], 
+        'DIRS': [BASE_DIR / 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -56,8 +53,6 @@ TEMPLATES = [
 WSGI_APPLICATION = 'student_project.wsgi.application'
 
 # 4. DATABASE
-# UPDATE: This logic uses SQLite locally but switches to a 
-# professional Database automatically when you go live!
 DATABASES = {
     'default': dj_database_url.config(
         default=f"sqlite:///{BASE_DIR / 'db.sqlite3'}",
@@ -75,7 +70,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # 6. INTERNATIONALIZATION
 LANGUAGE_CODE = 'en-us'
-TIME_ZONE = 'UTC'
+TIME_ZONE = 'Africa/Nairobi'  # Updated to East Africa Time
 USE_I18N = True
 USE_TZ = True
 
@@ -83,8 +78,6 @@ USE_TZ = True
 STATIC_URL = 'static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
-
-# PHASE 3 UPDATE: Helps WhiteNoise compress files for faster loading
 STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
 
 MEDIA_URL = '/media/'
@@ -97,3 +90,12 @@ LOGOUT_REDIRECT_URL = 'index'
 
 # 9. DEFAULT PRIMARY KEY
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
+
+# 10. EMAIL SETTINGS (reads from Render environment variables)
+EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_PORT = 587
+EMAIL_USE_TLS = True
+EMAIL_HOST_USER = os.environ.get('EMAIL_HOST_USER', '')
+EMAIL_HOST_PASSWORD = os.environ.get('EMAIL_HOST_PASSWORD', '')
+DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
